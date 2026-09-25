@@ -1,0 +1,15 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>M.E.F. Orçamentos</title><style>
+body{font-family:Arial;margin:0;background:#f2f5f9;color:#10233f}.top{background:#071b36;color:white;padding:24px 18px}.top h1{margin:0}.card{background:white;margin:14px;border-radius:16px;padding:18px;box-shadow:0 2px 8px #0001}.btn{display:block;width:100%;padding:14px;margin:8px 0;border:0;border-radius:10px;background:#0b5ed7;color:white;font-size:16px}.field{width:100%;box-sizing:border-box;padding:12px;margin:6px 0;border:1px solid #ccd5df;border-radius:9px}.total{font-size:24px;font-weight:bold;color:#0b5ed7}</style></head>
+<body><div class="top"><h1>M.E.F. Orçamentos</h1><p>Construção Civil e Pintura</p></div>
+<div class="card"><h2>Novo orçamento</h2><input id="cliente" class="field" placeholder="Nome do cliente"><input id="servico" class="field" placeholder="Serviço (ex.: pintura)">
+<input id="area" class="field" type="number" placeholder="Quantidade / m²"><input id="preco" class="field" type="number" placeholder="Preço por unidade">
+<input id="mao" class="field" type="number" placeholder="Mão de obra (R$)"><input id="desc" class="field" type="number" placeholder="Desconto (R$)">
+<button class="btn" onclick="calcular()">Calcular orçamento</button><div id="resultado"></div><button class="btn" onclick="salvar()">Salvar orçamento</button></div>
+<div class="card"><h2>Orçamentos salvos</h2><div id="lista"></div></div>
+<script>
+function dados(){let q=+area.value||0,p=+preco.value||0,m=+mao.value||0,d=+desc.value||0;return {cliente:cliente.value,servico:servico.value,q,p,m,d,total:q*p+m-d};}
+function calcular(){let x=dados();resultado.innerHTML='<p>Materiais/serviço: R$ '+(x.q*x.p).toFixed(2)+'</p><p>Mão de obra: R$ '+x.m.toFixed(2)+'</p><p>Desconto: R$ '+x.d.toFixed(2)+'</p><p class="total">Total: R$ '+x.total.toFixed(2)+'</p>';}
+function salvar(){let a=JSON.parse(localStorage.getItem('mef')||'[]');a.push(dados());localStorage.setItem('mef',JSON.stringify(a));listar();}
+function listar(){let a=JSON.parse(localStorage.getItem('mef')||'[]');lista.innerHTML=a.length?a.map((x,i)=>'<p><b>'+(i+1)+'. '+(x.cliente||'Cliente')+'</b><br>'+x.servico+' — R$ '+x.total.toFixed(2)+'</p>').join(''):'Nenhum orçamento salvo.';}listar();
+</script></body></html>
