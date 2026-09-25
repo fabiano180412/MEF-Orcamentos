@@ -1,0 +1,38 @@
+name: Gerar APK M.E.F. Orçamentos
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v6
+
+      - name: Configurar Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Configurar Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Dar permissão ao Gradle
+        working-directory: MEF_Orcamentos_Android
+        run: chmod +x gradlew
+
+      - name: Gerar APK
+        working-directory: MEF_Orcamentos_Android
+        run: ./gradlew assembleDebug
+
+      - name: Enviar APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: MEF-Orcamentos-APK
+          path: MEF_Orcamentos_Android/app/build/outputs/apk/debug/*.apk
